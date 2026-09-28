@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - AI WeatherWise</title>
+  <meta name="description" content="Sign in to your AI WeatherWise account to access personalized weather tracking and insights.">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="auth-page-container">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <a href="/index.html" class="brand-icon" style="margin-bottom: 0;">
+          <span>⚡</span>
+        </a>
+        <div>
+          <h1 class="auth-title">AI WeatherWise</h1>
+          <p style="font-size: 13px; color: var(--text-muted);">Intelligent Climate Companion</p>
+        </div>
+      </div>
+
+      <h2 style="font-size: 19px; font-weight: 700; margin-bottom: 6px;">Sign in to your account</h2>
+      <p class="auth-subtitle">Access your favorite cities, custom forecasts & insights.</p>
+
+      <div id="alertContainer"></div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" id="email" class="form-input" placeholder="e.g. reader@weatherwise.ai" required autocomplete="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="••••••••" required autocomplete="current-password" />
+        </div>
+
+        <button type="submit" class="btn-primary-action" style="margin-top: 18px;">
+          Sign In
+        </button>
+      </form>
+
+      <!-- Quick Test Autofill Buttons -->
+      <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-light);">
+        <p style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px;">
+          One-Click Demo Credentials:
+        </p>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" onclick="fillDemoCredentials('admin')" class="btn-secondary" style="flex: 1; justify-content: center; font-size: 12px;">
+            Demo Admin
+          </button>
+          <button type="button" onclick="fillDemoCredentials('reader')" class="btn-secondary" style="flex: 1; justify-content: center; font-size: 12px;">
+            Demo Reader
+          </button>
+        </div>
+      </div>
+
+      <div class="auth-footer">
+        Don't have an account? <a href="/register.html">Create one here</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

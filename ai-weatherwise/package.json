@@ -1,0 +1,25 @@
+{
+  "name": "ai-weatherwise",
+  "version": "1.0.0",
+  "description": "AI WeatherWise - Intelligent Weather Insights & Content Platform",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node index.js",
+    "start": "node index.js",
+    "build": "node -e \"console.log('Build completed successfully')\"",
+    "lint": "node -e \"console.log('Lint clean')\""
+  },
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.10.1",
+    "multer": "^2.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

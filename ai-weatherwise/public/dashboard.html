@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - AI WeatherWise</title>
+  <meta name="description" content="AI WeatherWise interactive meteorological dashboard.">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <!-- Sidebar Navigation Rail -->
+    <aside class="sidebar-rail" id="sidebarRail">
+      <a href="/index.html" class="brand-icon" title="AI WeatherWise">
+        <span>⚡</span>
+      </a>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a href="/dashboard.html" class="nav-btn active" data-title="Dashboard" id="navDashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/weather.html" class="nav-btn" data-title="Weather Search" id="navWeather">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/favorites.html" class="nav-btn" data-title="Saved Cities" id="navFavorites">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/posts.html" class="nav-btn" data-title="Meteorological Insights" id="navPosts">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path><path d="M6 10h10"></path></svg>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/admin.html" class="nav-btn" data-title="Admin Console" id="navAdminLink" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav-spacer"></div>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <button onclick="api.logout()" class="nav-btn" data-title="Sign Out" id="navLogoutBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+      <!-- Top Bar -->
+      <header class="top-bar" id="topBar">
+        <div class="user-greeting" id="userGreetingWrap">
+          <div class="user-avatar" id="navbarUserAvatar">W</div>
+          <div class="user-meta">
+            <div class="greeting-sub" id="greetingTime">Live Weather Intelligence</div>
+            <div class="user-name" id="navbarUserName">Guest Explorer</div>
+          </div>
+        </div>
+
+        <!-- Global Pill Search Form -->
+        <div class="search-container">
+          <form class="search-box" id="searchForm">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search any global city..." autocomplete="off" />
+            <button type="submit" class="search-submit-btn" id="searchBtn">Search</button>
+          </form>
+        </div>
+
+        <div class="top-actions">
+          <button id="unitToggleBtn" onclick="toggleTemperatureUnit()" class="unit-toggle-btn" title="Toggle Celsius / Fahrenheit">
+            <span id="unitC" class="unit-val active">°C</span>
+            <span class="unit-divider">|</span>
+            <span id="unitF" class="unit-val">°F</span>
+          </button>
+          <button id="geoLocateBtn" onclick="detectUserLocation()" class="btn-secondary" title="Get real-time weather at your current GPS location">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle><line x1="12" y1="2" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="22"></line><line x1="2" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="22" y2="12"></line></svg>
+            <span>My Location</span>
+          </button>
+          <button id="refreshWeatherBtn" onclick="refreshCurrentWeather()" class="btn-secondary" title="Refresh real-time weather observation">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path></svg>
+          </button>
+          <button id="favToggleBtn" onclick="toggleFavoriteCurrentCity()" class="btn-secondary" style="display: none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+            Save Favorite
+          </button>
+          <a href="/login.html" class="btn-secondary" id="authActionLink">
+            <span id="navbarUserRole">Account</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- Alert messages -->
+      <div id="dashAlertContainer" style="padding: 0 32px; margin-top: 14px;"></div>
+
+      <!-- Quick City Selection Pills -->
+      <div style="padding: 0 32px; display: flex; gap: 8px; overflow-x: auto; margin-top: 14px; padding-bottom: 4px;">
+        <button class="toggle-pill-btn" onclick="detectUserLocation()" style="font-weight: 700; color: var(--primary); background: rgba(37,99,235,0.08); border-color: rgba(37,99,235,0.25);">📍 Real-Time Location</button>
+        <button class="toggle-pill-btn active" onclick="quickSearchCity('London')">London</button>
+        <button class="toggle-pill-btn" onclick="quickSearchCity('Tokyo')">Tokyo</button>
+        <button class="toggle-pill-btn" onclick="quickSearchCity('New York')">New York</button>
+        <button class="toggle-pill-btn" onclick="quickSearchCity('Bangalore')">Bangalore</button>
+        <button class="toggle-pill-btn" onclick="quickSearchCity('Paris')">Paris</button>
+        <button class="toggle-pill-btn" onclick="quickSearchCity('Sydney')">Sydney</button>
+        <button class="toggle-pill-btn" onclick="quickSearchCity('Dubai')">Dubai</button>
+      </div>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+        <div class="dashboard-main-col">
+          <!-- Row 1: Weather Hero & Air Quality -->
+          <div class="top-metrics-row">
+            <section class="weather-hero-card" id="weatherHeroCard">
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                  <div class="card-tag">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+                    <span>Weather • <span id="heroCityName">London, UK</span></span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="badge badge-success" id="heroLiveBadge" style="display: inline-flex; align-items: center; gap: 5px; font-size: 11px; padding: 4px 10px;">
+                      <span style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block; box-shadow: 0 0 8px #22c55e;"></span>
+                      <span id="heroLiveSource">Live Real-Time</span>
+                    </span>
+                    <span id="heroObservationTime" style="font-size: 11px; color: var(--text-light);">Observed Live</span>
+                  </div>
+                </div>
+                <div class="hero-temp-wrap">
+                  <div class="hero-temp-large" id="heroTempLarge">--°C</div>
+                  <div class="hero-temp-sub" id="heroTempSub">Min --° / Max --°</div>
+                  <div class="hero-condition-text" id="heroCondition">Loading atmospheric state...</div>
+                </div>
+              </div>
+
+              <div class="metrics-pills-row">
+                <div class="metric-pill dark">
+                  <span class="pill-label">Pressure</span>
+                  <span class="pill-val" id="heroPressure">1014 hPa</span>
+                </div>
+                <div class="metric-pill lime">
+                  <span class="pill-label">Visibility</span>
+                  <span class="pill-val" id="heroVisibility">9.5 km</span>
+                </div>
+                <div class="metric-pill light">
+                  <span class="pill-label">Humidity</span>
+                  <span class="pill-val" id="heroHumidity">72%</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="air-quality-card" id="airQualityCard">
+              <div>
+                <div class="card-tag">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path></svg>
+                  <span>Air Quality • Main Pollutant: PM 2.5</span>
+                </div>
+                <div class="aqi-num-wrap">
+                  <div class="aqi-large" id="aqiVal">34</div>
+                  <div class="aqi-badge" id="aqiBadge">AQI • Good</div>
+                </div>
+                <div class="wind-indicator" id="windText">14 km/h • West Wind</div>
+              </div>
+
+              <div class="aqi-bar-wrapper">
+                <div class="aqi-levels-row">
+                  <span>Good</span>
+                  <span>Standard</span>
+                  <span>Hazardous</span>
+                </div>
+                <div class="aqi-track">
+                  <div class="aqi-pointer" id="aqiPointer" style="left: 20%;"></div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- Row 2: Temperature Timeline Curve & Tomorrow Recommendation -->
+          <div class="middle-metrics-row">
+            <section class="temperature-today-card" id="tempTodayCard">
+              <div class="card-header-flex">
+                <h3 class="card-title">How's the temperature today?</h3>
+                <div class="metric-toggle-pills">
+                  <button class="toggle-pill-btn active">Temperature</button>
+                  <button class="toggle-pill-btn">Humidity</button>
+                  <button class="toggle-pill-btn">Wind</button>
+                </div>
+              </div>
+
+              <div class="temp-curve-container">
+                <svg id="tempSplineSvg" class="temp-curve-svg" viewBox="0 0 400 80"></svg>
+                <div class="temp-curve-nodes" id="tempNodes"></div>
+              </div>
+            </section>
+
+            <section class="recommendation-card" id="recommendationCard">
+              <div>
+                <div class="rec-title-sub">Smart Recommendation</div>
+                <h3 class="rec-headline" id="recHeadline">Daily Activity Advisor</h3>
+                <div class="rec-temp-badge" id="recBadge">AI Planner</div>
+                <div class="rec-condition-text" id="recCondition">Personalized weather lifestyle guidance</div>
+              </div>
+              <div class="rec-body-text" id="recBody">
+                Analyzing current meteorological conditions with Gemini...
+              </div>
+            </section>
+          </div>
+
+          <!-- Row 3: Gemini Meteorological Summary -->
+          <section class="ai-summary-card" id="aiSummaryCard">
+            <div class="ai-header-badge">
+              <span>✦ Gemini 3.8 Intelligence</span>
+            </div>
+            <h3 class="card-title" style="margin-bottom: 10px;">Natural Language Meteorological Summary</h3>
+            <p class="ai-summary-content" id="aiSummaryText">
+              Connecting to Gemini AI for live climate assessment...
+            </p>
+            <div class="ai-meta-source">
+              <span id="aiSummarySource">Engine: Gemini 3.8 Flash</span>
+              <span style="color: var(--primary); font-weight: 600; cursor: pointer;" onclick="loadCityWeather(currentCity)">Refresh Assessment ↻</span>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right Side Column -->
+        <aside class="dashboard-side-col">
+          <div class="side-card" id="sunArcCard">
+            <div class="city-quick-header">
+              <div>
+                <div class="side-city-name" id="sideCity">London</div>
+                <div class="side-city-sub" id="sideSub">United Kingdom</div>
+              </div>
+              <div class="side-city-temp" id="sideTemp">--°C</div>
+            </div>
+
+            <div class="sun-arc-box">
+              <svg class="sun-arc-svg" viewBox="0 0 200 100">
+                <path d="M 30 80 A 70 70 0 0 1 170 80" fill="none" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4" />
+                <path d="M 30 80 L 170 80" fill="none" stroke="#f1f5f9" stroke-width="1.5" />
+                <circle id="sunOrb" cx="100" cy="20" r="9" fill="#f97316" stroke="#fff" stroke-width="2.5" />
+              </svg>
+              <div class="sun-times-row">
+                <div>
+                  <span style="opacity: 0.7;">Sunrise</span>
+                  <div class="sun-time-val" id="sunriseTime">06:00 am</div>
+                </div>
+                <div>
+                  <span style="opacity: 0.7;">Sunset</span>
+                  <div class="sun-time-val" id="sunsetTime">06:45 pm</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="uv-index-pill-card">
+              <div class="uv-badge-val">
+                <div class="uv-num" id="uvNum">5 UVI</div>
+                <div class="uv-tag">Moderate</div>
+              </div>
+              <div class="uv-desc" id="uvDesc">Standard risk of ultraviolet exposure. Sun protection recommended.</div>
+            </div>
+          </div>
+
+          <div class="side-card" id="forecastCard">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h3 class="card-title">Weather Prediction</h3>
+              <span style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Next 5 Days</span>
+            </div>
+            <div class="forecast-list" id="forecastList"></div>
+            <a href="/weather.html" class="btn-primary-action" style="text-decoration: none;">
+              <span>Detailed Meteorological Breakdown</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saved Locations - AI WeatherWise</title>
+  <meta name="description" content="Manage your personalized saved cities and monitor live meteorological conditions in AI WeatherWise.">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <!-- Sidebar Navigation Rail -->
+    <aside class="sidebar-rail" id="sidebarRail">
+      <a href="/index.html" class="brand-icon" title="AI WeatherWise">
+        <span>⚡</span>
+      </a>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <a href="/dashboard.html" class="nav-btn" data-title="Dashboard" id="navDashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/weather.html" class="nav-btn" data-title="Weather Search" id="navWeather">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/favorites.html" class="nav-btn active" data-title="Saved Cities" id="navFavorites">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/posts.html" class="nav-btn" data-title="Meteorological Insights" id="navPosts">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path><path d="M6 10h10"></path></svg>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/admin.html" class="nav-btn" data-title="Admin Console" id="navAdminLink" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+          </a>
+        </li>
+      </ul>
+
+      <div class="nav-spacer"></div>
+
+      <ul class="nav-links">
+        <li class="nav-item">
+          <button onclick="api.logout()" class="nav-btn" data-title="Sign Out">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="main-wrapper">
+      <header class="top-bar">
+        <div class="user-greeting">
+          <div class="user-avatar" id="navbarUserAvatar">W</div>
+          <div class="user-meta">
+            <div class="greeting-sub">Personalized Tracking</div>
+            <div class="user-name" id="navbarUserName">Saved Locations</div>
+          </div>
+        </div>
+
+        <div class="top-actions">
+          <button onclick="openAddModal()" class="btn-primary-action" style="margin-top: 0; width: auto; padding: 8px 18px;">
+            + Add Favorite City
+          </button>
+        </div>
+      </header>
+
+      <div style="padding: 28px 32px; max-width: 1400px; margin: 0 auto; width: 100%;">
+        <div id="favAlertContainer"></div>
+
+        <div id="favoritesContainer">
+          <!-- Loaded by favorites.js -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add City Modal -->
+  <div class="modal-overlay" id="addFavModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Favorite City</h3>
+        <button type="button" class="modal-close" onclick="closeAddModal()">&times;</button>
+      </div>
+
+      <div id="modalAlertContainer"></div>
+
+      <form id="addFavoriteForm">
+        <div class="form-group" style="position: relative;">
+          <label class="form-label" for="favCityInput">City Name</label>
+          <input type="text" id="favCityInput" class="form-input" placeholder="e.g. Amsterdam, Tokyo, Chicago" required autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="favCountryInput">Country / Region</label>
+          <input type="text" id="favCountryInput" class="form-input" placeholder="e.g. Netherlands, Japan, USA" />
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn-secondary" onclick="closeAddModal()">Cancel</button>
+          <button type="submit" class="btn-primary-action" style="width: auto; margin-top: 0; padding: 8px 20px;">Save Location</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/favorites.js"></script>
+</body>
+</html>

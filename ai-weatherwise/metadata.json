@@ -1,0 +1,6 @@
+{
+  "name": "AI WeatherWise",
+  "description": "An intelligent weather forecasting and insights platform featuring Gemini AI summaries, personalized activity recommendations, favorite city management, content publishing, comment moderation, and comprehensive admin analytics.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
